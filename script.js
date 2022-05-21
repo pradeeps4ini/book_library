@@ -3,28 +3,41 @@ const myLibrary = [];
 
 
 const Book = function(bookName="unknown", author="unknown", pages=0, isRead=false) {
+  let bookId;
+  bookId += 1;
   return {bookName, author, pages, isRead};
 }
 
 
-const enterBookDetails = function() {
-  const bookName = prompt("Enter book name");
-  const author = prompt("Enter author name");
-  const pages = prompt("Enter pages");
-  const isRead = prompt("is book Read");
-
-  return [bookName, author, pages, isRead];
-}
-
-
-const addBookToMyLibrary = function() {
-  let [bookName, author, pages, isRead] = enterBookDetails(); 
-  const newBook = Book(bookName, author, pages,  isRead);
+const addBookToMyLibrary = function(...args) {
+  console.log(args)
+  const [author, book, pages, isRead] = [...args]; 
+  const newBook = Book(author, book, pages, isRead);
   myLibrary.push(newBook);
 }
 
 
-const dialog = document.querySelector("#bookDetailsModal");
-const addBook = document.querySelector(".add_book");
+const domElements = function() {
+  const dialogModal = document.getElementById("bookDetailsModal");
+  const addBookBtn = document.querySelector(".addBook");
+  const cancelFormBtn = document.querySelector(".cancelButton");
+  const submitFormBtn = document.querySelector(".submitBook");
+  const authorName = document.getElementById("authorName").value;
+  const bookName = document.getElementById("bookName").value;
+  const bookPages = document.getElementById("bookPages").value;
+  const isBookRead = document.getElementById("isBookRead").value;
 
-addBook.addEventListener('click', dialog.showModal());
+  addBookBtn.addEventListener("click", () => dialogModal.showModal());
+  cancelFormBtn.addEventListener("click", () => dialogModal.close());
+  submitFormBtn.addEventListener("click", (e) => {
+    const authorName = document.getElementById("authorName").value;
+    const bookName = document.getElementById("bookName").value;
+    const bookPages = document.getElementById("bookPages").value;
+    const isBookRead = document.getElementById("isBookRead").value;
+    
+    dialogModal.close();
+    addBookToMyLibrary(authorName, bookName, bookPages, isBookRead);
+  });
+};
+
+domElements();
