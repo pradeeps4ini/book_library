@@ -1,0 +1,50 @@
+<!DOCTYPE html5>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Library</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <section class="header">
+    <h1>library</h1>
+  </section>
+  <section class="bookList">
+    <div class="new_book_button">
+      <button class="add_book"><span>&#43;</span>Add Book</button>
+    </div>
+    <div class="bookCards"></div>
+  </section>
+  
+  <dialog id="bookDetailsModal">
+    <form id ="modal" action="" method="dialog">
+      <button type="button" class="cancelButton">&#10799;</button>
+      <div>
+        <label for="authorName">Author Name</label>
+        <input type="text" id="authorName" name="authorName">
+      </div>
+
+      <div>
+        <label for="bookName">Book Name</label>
+        <input type="text" id="bookName" name="bookName">
+      </div>
+
+      <div>
+        <label for="bookPages">Book Pages</label>
+        <input type="number" id="bookPages" name="bookPages">
+      </div>
+
+      <div>
+        <label for="isBookRead">Is Book Read?</label>
+        <input type="checkbox" id="isBookRead" name="isBookRead">
+      </div>
+
+      <button type="button" class="submitBook">Submit</button>
+    </form>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+:root {
+  --font-size: 10px;
+  
+  --clr-light: #ffffff;
+  --clr-dark: #000000;
+
+  --clr-primary: #f3f3f3;
+  --clr-highlight: #63bfc4;
+}
+
+
+html {
+  font-size: var(--font-size);
+}
+
+body {
+  background-color: var(--clr-primary);
+}
+
+
+.header {
+  font-size: calc(var(--font-size) * 1.8);
+  background-color: var(--clr-light);   
+  padding: 4rem;
+  margin-bottom: 2rem;
+}
+
+
+.bookList {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+}
+
+
+#bookDetailsModal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2rem;
+}
+
+#modal {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1rem;  
+}
+
+#modal div {
+  display: flex;
+  gap: 2rem;
+}
+
+label {
+  display: inline-block;
+  max-width: 70px;  
+  margin-right: 1rem;
+}
+
+input {
+  max-width: 15rem;
+}
