@@ -2,18 +2,16 @@
 const myLibrary = [];
 
 
-const Book = function(bookName="unknown", author="unknown", pages=0, isRead=false) {
-  let bookId;
-  bookId += 1;
-  return {bookName, author, pages, isRead};
+const Book = function(bookName="unknown", author="unknown", pages=0, isRead=false, id) {
+  return {bookName, author, pages, isRead, id};
 }
 
 
 const addBookToMyLibrary = function(...args) {
-  console.log(args)
-  const [author, book, pages, isRead] = [...args]; 
-  const newBook = Book(author, book, pages, isRead);
+  const [author, book, pages, isRead, id] = [...args]; 
+  const newBook = Book(author, book, pages, isRead, id);
   myLibrary.push(newBook);
+  console.log(newBook, myLibrary);
 }
 
 
@@ -25,18 +23,16 @@ const domElements = function() {
   const authorName = document.getElementById("authorName").value;
   const bookName = document.getElementById("bookName").value;
   const bookPages = document.getElementById("bookPages").value;
-  const isBookRead = document.getElementById("isBookRead").value;
-
+  const isBookRead = document.getElementById("isBookRead").checked;
+  
+  let id = 0;
+  
   addBookBtn.addEventListener("click", () => dialogModal.showModal());
   cancelFormBtn.addEventListener("click", () => dialogModal.close());
-  submitFormBtn.addEventListener("click", (e) => {
-    const authorName = document.getElementById("authorName").value;
-    const bookName = document.getElementById("bookName").value;
-    const bookPages = document.getElementById("bookPages").value;
-    const isBookRead = document.getElementById("isBookRead").value;
-    
+  submitFormBtn.addEventListener("click", () => {
     dialogModal.close();
-    addBookToMyLibrary(authorName, bookName, bookPages, isBookRead);
+    addBookToMyLibrary(authorName, bookName, bookPages, isBookRead, id);
+    id += 1;
   });
 };
 
