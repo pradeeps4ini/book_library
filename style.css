@@ -24,21 +24,17 @@ body {
   background-color: var(--clr-primary);
 }
 
-
-.header {
-  font-size: calc(var(--font-size) * 1.8);
-  background-color: var(--clr-light);   
-  padding: 4rem;
-  margin-bottom: 2rem;
+section {
+  background-color: var(--clr-light);
 }
 
+.hidden {
+  display: none !important;
+}
 
-.bookList {
+.flex {
   display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
 }
-
 
 #bookDetailsModal {
   position: absolute;
@@ -49,7 +45,6 @@ body {
 }
 
 #modal {
-  display: flex;
   flex-flow: column nowrap;
   gap: 1rem;  
 }
@@ -67,4 +62,71 @@ label {
 
 input {
   max-width: 15rem;
+}
+
+
+.bookCardUi {
+  font-size: calc(var(--font-size) * 1.5);
+  max-width: 25rem;
+  padding: 2rem 2rem 3rem 2rem;
+  background: var(--clr-primary);
+  border: 1px solid var(--clr-light);
+  border-radius: 20px;
+  flex-flow: column nowrap;
+  gap: 2rem;
+}
+
+.bookCardUi > div {
+  display: flex;
+  gap: 2rem;
+}
+
+.bookCardUi > div:first-child {
+  justify-content: flex-end;
+}
+
+#toggleReadStatus {
+  max-width: 15rem;
+  padding: .15rem 3rem;
+}
+
+
+#library {
+  max-width: 100%;
+  display: grid;
+  grid-template: 1fr 5fr / 1fr 4fr;
+  grid-template-areas: "header header"
+                       "bookStats bookList";
+  gap: 2rem;
+}
+
+
+#header {
+  font-size: calc(var(--font-size) * 1.8);
+  padding: 4rem;
+  grid-area: header;
+}
+
+
+#libraryStats {
+  padding: 5rem 2rem;
+  flex-flow: column nowrap;
+  gap: 4rem;
+}
+
+.stats {
+  font-size: calc(var(--font-size) * 1.6);
+  flex-flow: column nowrap;
+  gap: 2rem; 
+}
+
+
+#bookList {
+  padding: 5rem 2rem;
+}
+
+.bookCards {
+  display: grid;
+  grid-template: repeat(auto-fit, minmax(200px, 1fr)) / repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
 }
