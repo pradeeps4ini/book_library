@@ -40,9 +40,9 @@ const makeBookCardUi = function() {
   deleteBtn.setAttribute("class", "deleteBookCard");
   deleteBtn.setAttribute("type", "button");
 
-  deleteBtn.addEventListener("click", deleteBookCard);
+  deleteBtn.addEventListener("click", Book.deleteBookCard);
   toggleBookReadStatus.addEventListener("click", () => {
-    toggleReadStatus();  
+    Book.toggleReadStatus();  
   });
 
   
@@ -88,59 +88,61 @@ const CreateLibrary = function() {
 }; 
 
 
-const updateDomBookIds = function(domBookList, bookId) {
-  const domBookLength = domBookList.children.length;
+class Book {
 
-  for (let i= bookId - 1; i < domBookLength; i+= 1) {
-    domBookList.children[i].className = i + 1; 
+  constructor({authorName, bookName, bookPages, bookReadStatus, id}) {
+    this.authorName = authorName;
+    this.bookName = bookName;
+    this.bookPages = bookPages;
+    this.bookReadStatus = bookReadStatus;
+    this.id = id;
   }
-}
-
-
-const toggleReadStatus = function() {
-  event.target.textContent = event.target.textContent.includes("No!") ? "Read? Yes!" : "Read? No!";    
-  const bookId = +event.target.parentNode.className;
-  library.updateBookReadStatus(bookId);
-};
-
-
-const deleteBookCard = function() {
-  let bookDiv = (event.target === event.currentTarget) ? 
-                event.target.parentNode :
-                event.currentTarget.parentNode;
   
-  let bookList = bookDiv.parentNode;
-  let bookId = +bookDiv.className;
-  bookDiv.remove();
-  library.removeBook(bookId);
-  library.shiftBooksId(bookId);
-  updateDomBookIds(bookList, bookId);
-}
+  static publishBookToWebPage = function(newBook, bookCardDiv,  bookListElement) {
+    console.log(newBook)
+    bookCardDiv.children[1].textContent = `Author: ${newBook.authorName}`;
+    bookCardDiv.children[2].textContent = `Book: ${newBook.bookName}`;
+    bookCardDiv.children[3].textContent = `Pages: ${newBook.bookPages}`;
 
+    bookCardDiv.children[4].textContent = `Read? ${(newBook.bookReadStatus === true) ? "Yes!" : "No!"}`;
+    bookCardDiv.classList.add(newBook.id); 
+    bookListElement.appendChild(bookCardDiv);
+  }
+  static updateDomBookIds = function(domBookList, bookId) {
+    const domBookLength = domBookList.children.length;
 
-const publishBookToWebPage = function(newBook, bookCardDiv,  bookListElement) {
-  bookCardDiv.children[1].textContent = `Author: ${newBook.authorName}`;
-  bookCardDiv.children[2].textContent = `Book: ${newBook.bookName}`;
-  bookCardDiv.children[3].textContent = `Pages: ${newBook.bookPages}`;
+    for (let i = bookId - 1; i< domBookLength; i+= 1) {
+      domBookList.children[i].className = i + 1;
+    }
+  }
 
-  bookCardDiv.children[4].textContent = `Read? ${(newBook.bookReadStatus === true) ? "Yes!" : "No!"}`;
-  bookCardDiv.classList.add(newBook.id); 
-  bookListElement.appendChild(bookCardDiv);
-}
+  static toggleReadStatus = function() {
+    event.target.textContent = event.target.textContent.includes("No!") ? "Read? Yes!" : "Read? No!";
+    const bookId = +event.target.parentNode.className;
+    library.updateBookReadStatus(bookId)
+  }
 
+  static deleteBookCard = function() {
+    let bookDiv = (event.target === event.currentTarget) ? 
+                  event.target.parentNode :
+                  event.currentTarget.parentNode;
 
-const Book = function({authorName, bookName, bookPages, bookReadStatus, id}) {
-  return {authorName, bookName, bookPages, bookReadStatus, id};
+    let bookList = bookDiv.parentNode;
+    let bookId = +bookDiv.className;
+    bookDiv.remove();
+    library.removeBook(bookId);
+    library.shiftBooksId(bookId);
+    Book.updateDomBookIds(bookList, bookId);
+  }
 }
 
 
 const createBook = function(bookInputValues, bookCardDiv, bookListElement) {
   const bookId = library.generateBookId();
   bookInputValues.id = bookId;
-  const newBook = Book({...bookInputValues});
+  const newBook = new Book({...bookInputValues});
   library.addBook(newBook);
-  publishBookToWebPage(newBook, bookCardDiv, bookListElement);
-  console.log(library.allBooks);
+  Book.publishBookToWebPage(newBook, bookCardDiv, bookListElement);
 }
 
 
@@ -168,5 +170,4 @@ const domInteractions = function() {
 
 
 const library = new CreateLibrary();
-
 domInteractions();
