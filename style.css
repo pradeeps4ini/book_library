@@ -85,7 +85,7 @@ input {
   gap: 4rem;
 }
 
-.stats {
+.libraryStats {
   font-size: calc(var(--font-size) * 1.6);
   flex-flow: column nowrap;
   gap: 2rem; 

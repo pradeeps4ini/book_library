@@ -11,11 +11,11 @@ const domElements = function() {
   const bookPages = document.getElementById("bookPages");
   const bookReadStatus = document.getElementById("isBookRead");
   const bookListElement = document.getElementById("bookList");
-
+  const libraryStatsElement = document.querySelector(".libraryStats");
   const bookInputValues = {authorName, bookName, bookPages, bookReadStatus};
 
   return {bookInputModal, addNewBookBtn, bookInputCancelBtn, submitBook, 
-    bookInputValues, bookListElement};
+    bookInputValues, bookListElement, libraryStatsElement};
 }
 
 
@@ -54,11 +54,25 @@ const makeBookCardUi = function() {
 
 const CreateLibrary = function() {
   this.allBooks = [];
+  
+  this.isBookInLibrary = function(newBook) {
+    const duplicateBook = this.allBooks.filter(book => {
+      const bookAuthor = book.authorName.toLowerCase();
+      const bookName = book.bookName.toLowerCase();
+
+      const newBookAuthor = newBook.authorName.toLowerCase();
+      const newBookName = newBook.bookName.toLowerCase();
+
+      if ((bookAuthor === newBookAuthor && bookName === newBookName)) {
+        return newBook;
+      }
+    });
+
+    return (duplicateBook.length > 0) ? false : true;
+  }
 
   this.addBook = function(newBook) {
-    if (!(newBook in this.allBooks)) {
-      this.allBooks.push(newBook);
-    }  
+     this.allBooks.push(newBook);
   };
 
   this.removeBook = function(bookId) {
@@ -85,6 +99,27 @@ const CreateLibrary = function() {
     const id = (this.allBooks.length) + 1;
     return id;
   };
+
+  this.bookStats = function() {
+    let {libraryStatsElement} = domElements();
+    let readBooks = 0;
+    let totalBooks = this.allBooks.length;
+    let totalAuthorRead = 0;
+
+    this.allBooks.forEach(book  =>  {
+      (book.bookReadStatus === true) ? readBooks += 1 : null;  
+    });
+ 
+    let uniqueAuthors = this.allBooks.map(book => book.authorName);
+    totalAuthorRead = new Set(uniqueAuthors);
+
+    let notReadBooks = totalBooks - readBooks;
+
+    libraryStatsElement.children[0].textContent = `Authors: ${totalAuthorRead.size}`;
+    libraryStatsElement.children[1].textContent = `Books: ${totalBooks}`;
+    libraryStatsElement.children[2].textContent = `Books read: ${readBooks}`;
+    libraryStatsElement.children[3].textContent = `Books not read: ${notReadBooks}`;
+  }
 }; 
 
 
@@ -107,7 +142,9 @@ class Book {
     bookCardDiv.children[4].textContent = `Read? ${(newBook.bookReadStatus === true) ? "Yes!" : "No!"}`;
     bookCardDiv.classList.add(newBook.id); 
     bookListElement.appendChild(bookCardDiv);
+    library.bookStats()
   }
+
   static updateDomBookIds = function(domBookList, bookId) {
     const domBookLength = domBookList.children.length;
 
@@ -120,6 +157,7 @@ class Book {
     event.target.textContent = event.target.textContent.includes("No!") ? "Read? Yes!" : "Read? No!";
     const bookId = +event.target.parentNode.className;
     library.updateBookReadStatus(bookId)
+    library.bookStats();
   }
 
   static deleteBookCard = function() {
@@ -132,6 +170,7 @@ class Book {
     bookDiv.remove();
     library.removeBook(bookId);
     library.shiftBooksId(bookId);
+    library.bookStats();
     Book.updateDomBookIds(bookList, bookId);
   }
 }
@@ -139,10 +178,15 @@ class Book {
 
 const createBook = function(bookInputValues, bookCardDiv, bookListElement) {
   const bookId = library.generateBookId();
+
   bookInputValues.id = bookId;
   const newBook = new Book({...bookInputValues});
-  library.addBook(newBook);
-  Book.publishBookToWebPage(newBook, bookCardDiv, bookListElement);
+  const isBookInLibrary = library.isBookInLibrary(newBook);
+  if (isBookInLibrary) {
+    library.addBook(newBook);
+    Book.publishBookToWebPage(newBook, bookCardDiv, bookListElement);
+    library.bookStats();
+  };
 }
 
 
