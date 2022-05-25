@@ -36,7 +36,7 @@ section {
   display: flex;
 }
 
-#bookDetailsModal {
+#bookInputModal {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -44,12 +44,12 @@ section {
   padding: 2rem;
 }
 
-#modal {
+#formModal {
   flex-flow: column nowrap;
   gap: 1rem;  
 }
 
-#modal div {
+#formModal div {
   display: flex;
   gap: 2rem;
 }

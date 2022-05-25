@@ -20,38 +20,23 @@
     </div>
 
     <div class="newBookButton">
-      <button class="addBook" type="button"><span>&#43;</span>Add Book</button>
+      <button class="addNewBook" type="button"><span>&#43;</span>Add Book</button>
     </div>
   </section>
   <section id="bookList">
-    <div class="bookCards"></div>
   </section>
  
   <div class="bookCardUi hidden flex">
-    <div>
-      <button type="button" id="deleteBook"><img src="./images/bin.png" alt="delete book"></button>
-    </div>
-    <div>
-      <p>Author</p>
-      <p></p>
-    </div>
-    <div>
-      <p>Book</p>
-      <p></p>
-    </div>
-    <div>
-      <p>Pages</p>
-      <p></p>
-    </div>
-    <div>
-      <p>Read?</p>
-      <button type="button" id="toggleReadStatus">Yes</button>
-    </div>
+    <button type="button" id="deleteBook"></button>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
   </div>
 
-  <dialog id="bookDetailsModal">
-    <form id ="modal" class="flex" action="" method="dialog">
-      <button type="button" class="cancelButton">&#10799;</button>
+  <dialog id="bookInputModal">
+    <form id ="formModal" class="flex" action="" method="dialog">
+      <button type="button" class="bookInputCancelBtn">&#10799;</button>
       <div>
         <label for="authorName">Author Name</label>
         <input type="text" id="authorName" name="authorName">
@@ -72,7 +57,7 @@
         <input type="checkbox" id="isBookRead" name="isBookRead">
       </div>
 
-      <button type="button" class="submitBook">Submit</button>
+      <button type="button" id="submitBook">Submit</button>
     </form>
   </dialog>
   </div>
