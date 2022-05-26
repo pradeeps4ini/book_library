@@ -13,7 +13,8 @@ const domElements = function() {
   const bookListElement = document.getElementById("bookList");
   const libraryStatsElement = document.querySelector(".libraryStats");
   const bookInputValues = {authorName, bookName, bookPages, bookReadStatus};
-
+  
+   
   return {bookInputModal, addNewBookBtn, bookInputCancelBtn, submitBook, 
     bookInputValues, bookListElement, libraryStatsElement};
 }
@@ -26,18 +27,34 @@ const createElement = function(element) {
 
 const makeBookCardUi = function() {
   const bookCardDiv = createElement("div");
-  
+  const authorNameDiv = createElement("div");
+  const bookNameDiv = createElement("div");
+  const bookPagesDiv = createElement("div");
+
+  const authorTitle = createElement("p");
+  const bookTitle = createElement("p");
+  const bookPagesTitle = createElement("p");
+
+  authorTitle.textContent = "Author: ";
+  bookTitle.textContent = "Book: ";
+  bookPagesTitle.textContent = "Pages: ";
+
   const authorNamePara = createElement("p");
   const bookNamePara = createElement("p");
   const bookPagesPara = createElement("p");
   const toggleBookReadStatus = createElement("button");
+   
+  toggleBookReadStatus.setAttribute("class", "toggleBtn");
+  [authorTitle, authorNamePara].forEach((item) => authorNameDiv.appendChild(item));
+  [bookTitle, bookNamePara].forEach((item) => bookNameDiv.appendChild(item));
+  [bookPagesTitle, bookPagesPara].forEach((item) => bookPagesDiv.appendChild(item));
 
   const deleteImg = createElement("img");
   const deleteBtn = createElement("button");
   deleteImg.setAttribute("src", "./images/bin.png");
   deleteImg.setAttribute("alt", "delete book button");
   deleteBtn.appendChild(deleteImg);
-  deleteBtn.setAttribute("class", "deleteBookCard");
+  deleteBtn.setAttribute("class", "deleteBookCardBtn");
   deleteBtn.setAttribute("type", "button");
 
   deleteBtn.addEventListener("click", () => {
@@ -48,8 +65,10 @@ const makeBookCardUi = function() {
   });
 
   
-  [deleteBtn, authorNamePara, bookNamePara, bookPagesPara, toggleBookReadStatus].
+  bookCardDiv.setAttribute("class", "bookCardDiv");
+  [deleteBtn, authorNameDiv, bookNameDiv, bookPagesDiv, toggleBookReadStatus].
     forEach((item) => bookCardDiv.appendChild(item));
+    
   return bookCardDiv;
 }
 
@@ -99,14 +118,12 @@ class LocalStorage {
 
   static deleteBook(bookId) {
     const localBooks = JSON.parse(localStorage.getItem("allBooks"));
-    //const books = (localBooks) ? JSON.parse(localBooks);
     localBooks.splice(bookId - 1, 1);
     localStorage.setItem("allBooks", JSON.stringify(localBooks));
   }
 
   static shiftBooksId(bookId) {
     const localBooks = JSON.parse(localStorage.getItem("allBooks"));
-    //const books = (localBooks) ? JSON.parse(localBooks);
     const booksLength = localBooks.length;
     
     for (let i= bookId - 1; i < booksLength; i+= 1) {
@@ -124,8 +141,6 @@ class LocalStorage {
         book.bookReadStatus = !book.bookReadStatus;
       }
     })
-    console.log(books);
-    console.log(library.allBooks);
     localStorage.setItem("allBooks", JSON.stringify(books));
   }
 };
@@ -192,11 +207,10 @@ const CreateLibrary = function() {
     totalAuthorRead = new Set(uniqueAuthors);
 
     let notReadBooks = totalBooks - readBooks;
-
-    libraryStatsElement.children[0].textContent = `Authors: ${totalAuthorRead.size}`;
-    libraryStatsElement.children[1].textContent = `Books: ${totalBooks}`;
-    libraryStatsElement.children[2].textContent = `Books read: ${readBooks}`;
-    libraryStatsElement.children[3].textContent = `Books not read: ${notReadBooks}`;
+    libraryStatsElement.children[0].children[1].textContent = totalAuthorRead.size;
+    libraryStatsElement.children[1].children[1].textContent = totalBooks;
+    libraryStatsElement.children[2].children[1].textContent = readBooks;
+    libraryStatsElement.children[3].children[1].textContent = notReadBooks;
   }
 }; 
 
@@ -212,11 +226,11 @@ class Book {
   }
   
   static publishBookToWebPage = function(newBook, bookCardDiv,  bookListElement) {
-    bookCardDiv.children[1].textContent = `Author: ${newBook.authorName}`;
-    bookCardDiv.children[2].textContent = `Book: ${newBook.bookName}`;
-    bookCardDiv.children[3].textContent = `Pages: ${newBook.bookPages}`;
+    bookCardDiv.children[1].children[1].textContent = newBook.authorName;
+    bookCardDiv.children[2].children[1].textContent = newBook.bookName;
+    bookCardDiv.children[3].children[1].textContent = newBook.bookPages;
 
-    bookCardDiv.children[4].textContent = `Read? ${(newBook.bookReadStatus === true) ? "Yes!" : "No!"}`;
+    bookCardDiv.children[4].textContent = `${(newBook.bookReadStatus === true) ? "Read" : "Not Read"}`;
     bookCardDiv.classList.add(newBook.id); 
     bookListElement.appendChild(bookCardDiv);
     library.bookStats()
@@ -231,8 +245,8 @@ class Book {
   }
 
   static toggleReadStatus = function() {
-    event.target.textContent = event.target.textContent.includes("No!") ? "Read? Yes!" : "Read? No!";
-    const bookId = +event.target.parentNode.className;
+    event.target.textContent = event.target.textContent.includes("Not") ? "Read" : "Not Read";
+    const bookId = +event.target.parentNode.classList[1];
     library.updateBookReadStatus(bookId)
     library.bookStats();
     LocalStorage.updateReadStatus(bookId);
@@ -242,9 +256,9 @@ class Book {
     let bookDiv = (event.target === event.currentTarget) ? 
                   event.target.parentNode :
                   event.currentTarget.parentNode;
-
+    
     let bookList = bookDiv.parentNode;
-    let bookId = +bookDiv.className;
+    let bookId = +bookDiv.classList[1];
     bookDiv.remove();
     library.removeBook(bookId);
     library.shiftBooksId(bookId);
@@ -257,9 +271,8 @@ class Book {
 
 
 const createBook = function(bookInputValues) {
-  const {bookListElement} = domElements();
+  const {bookListElement, libraryStatsElement} = domElements();
   const bookCardDiv = makeBookCardUi();
-  
   const bookId = library.generateBookId();
 
   bookInputValues.id = bookId;
@@ -268,7 +281,7 @@ const createBook = function(bookInputValues) {
   if (isBookInLibrary) {
     library.addBook(newBook);
     Book.publishBookToWebPage(newBook, bookCardDiv, bookListElement);
-    library.bookStats();
+    library.bookStats(libraryStatsElement);
     LocalStorage.addBook(newBook);
   };
 }
