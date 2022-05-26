@@ -34,6 +34,7 @@ section {
 
 
 #bookInputModal {
+  font-size: calc(var(--font-size) * 1.4);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -51,9 +52,20 @@ section {
   gap: 2rem;
 }
 
+.bookInputCancelBtn {
+  align-self: flex-end;
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+}
+
+#submitBook {
+  align-self: center;
+  padding: .5rem 3rem;
+}
+
 label {
   display: inline-block;
-  max-width: 70px;  
+  max-width: fit-content;  
   margin-right: 1rem;
 }
 

@@ -40,7 +40,9 @@ const makeBookCardUi = function() {
   deleteBtn.setAttribute("class", "deleteBookCard");
   deleteBtn.setAttribute("type", "button");
 
-  deleteBtn.addEventListener("click", Book.deleteBookCard);
+  deleteBtn.addEventListener("click", () => {
+    Book.deleteBookCard();
+  });
   toggleBookReadStatus.addEventListener("click", () => {
     Book.toggleReadStatus();  
   });
@@ -52,16 +54,93 @@ const makeBookCardUi = function() {
 }
 
 
+class LocalStorage {
+  
+  static publishBookFromLocal() {
+    const localBooks = localStorage.getItem("allBooks");
+    const books = (localBooks) ? JSON.parse(localBooks) : null;
+    if (books) {
+      books.forEach(book => createBook(book));
+    }
+  }
+
+  static setBooks() {
+    localStorage.setItem("allBooks", library.allBooks);
+  }
+
+  static getBooks() {
+    const localBooks = localStorage.getItem("allBooks");
+    const books = (localBooks) ? JSON.parse(localBooks) : null;
+    return books;
+  }
+
+  static isBookInLocalStorage(allBooks, book) {
+    const authorName = book.authorName;
+    const bookName = book.bookName;
+    const duplicateBook = allBooks.filter(item => {
+      const author = item.authorName;
+      const book = item.bookName;
+
+      return (author === authorName && book === bookName) ? item : null;
+    })
+
+    return (duplicateBook.length > 0) ? false : true;
+  }
+
+  static addBook(newBook) {
+    const localBooks = localStorage.getItem("allBooks");
+    const books = (localBooks) ? JSON.parse(localBooks) : [];
+    const bookInLocalStorage = this.isBookInLocalStorage(books, newBook);    
+    if (bookInLocalStorage) {
+      books.push(newBook);
+      localStorage.setItem("allBooks", JSON.stringify(books));
+    }
+  }
+
+  static deleteBook(bookId) {
+    const localBooks = JSON.parse(localStorage.getItem("allBooks"));
+    //const books = (localBooks) ? JSON.parse(localBooks);
+    localBooks.splice(bookId - 1, 1);
+    localStorage.setItem("allBooks", JSON.stringify(localBooks));
+  }
+
+  static shiftBooksId(bookId) {
+    const localBooks = JSON.parse(localStorage.getItem("allBooks"));
+    //const books = (localBooks) ? JSON.parse(localBooks);
+    const booksLength = localBooks.length;
+    
+    for (let i= bookId - 1; i < booksLength; i+= 1) {
+      localBooks[i].id -= 1;
+    }
+
+    localStorage.setItem("allBooks", JSON.stringify(localBooks));
+  }
+
+  static updateReadStatus(bookId) {
+    const localBooks = localStorage.getItem("allBooks");
+    const books = JSON.parse(localBooks);
+    books.forEach(book => {
+      if (book.id === bookId) {
+        book.bookReadStatus = !book.bookReadStatus;
+      }
+    })
+    console.log(books);
+    console.log(library.allBooks);
+    localStorage.setItem("allBooks", JSON.stringify(books));
+  }
+};
+
+
 const CreateLibrary = function() {
   this.allBooks = [];
   
   this.isBookInLibrary = function(newBook) {
+    const newBookAuthor = newBook.authorName.toLowerCase();
+    const newBookName = newBook.bookName.toLowerCase();
+
     const duplicateBook = this.allBooks.filter(book => {
       const bookAuthor = book.authorName.toLowerCase();
       const bookName = book.bookName.toLowerCase();
-
-      const newBookAuthor = newBook.authorName.toLowerCase();
-      const newBookName = newBook.bookName.toLowerCase();
 
       if ((bookAuthor === newBookAuthor && bookName === newBookName)) {
         return newBook;
@@ -80,7 +159,6 @@ const CreateLibrary = function() {
   };
 
   this.updateBookReadStatus = function(bookId) {
-    console.log(bookId)
     this.allBooks.forEach((book) => {
       if (book.id === bookId) {
         book.bookReadStatus = !book.bookReadStatus;}
@@ -134,7 +212,6 @@ class Book {
   }
   
   static publishBookToWebPage = function(newBook, bookCardDiv,  bookListElement) {
-    console.log(newBook)
     bookCardDiv.children[1].textContent = `Author: ${newBook.authorName}`;
     bookCardDiv.children[2].textContent = `Book: ${newBook.bookName}`;
     bookCardDiv.children[3].textContent = `Pages: ${newBook.bookPages}`;
@@ -158,6 +235,7 @@ class Book {
     const bookId = +event.target.parentNode.className;
     library.updateBookReadStatus(bookId)
     library.bookStats();
+    LocalStorage.updateReadStatus(bookId);
   }
 
   static deleteBookCard = function() {
@@ -171,12 +249,17 @@ class Book {
     library.removeBook(bookId);
     library.shiftBooksId(bookId);
     library.bookStats();
-    Book.updateDomBookIds(bookList, bookId);
+    this.updateDomBookIds(bookList, bookId);
+    LocalStorage.deleteBook(bookId);
+    LocalStorage.shiftBooksId(bookId);
   }
 }
 
 
-const createBook = function(bookInputValues, bookCardDiv, bookListElement) {
+const createBook = function(bookInputValues) {
+  const {bookListElement} = domElements();
+  const bookCardDiv = makeBookCardUi();
+  
   const bookId = library.generateBookId();
 
   bookInputValues.id = bookId;
@@ -186,13 +269,13 @@ const createBook = function(bookInputValues, bookCardDiv, bookListElement) {
     library.addBook(newBook);
     Book.publishBookToWebPage(newBook, bookCardDiv, bookListElement);
     library.bookStats();
+    LocalStorage.addBook(newBook);
   };
 }
 
 
 const domInteractions = function() {
-  let {bookInputModal, addNewBookBtn, bookInputCancelBtn, submitBook, 
-    bookInputValues, bookListElement} = domElements();
+  let {bookInputModal, addNewBookBtn, bookInputCancelBtn, submitBook, bookInputValues} = domElements();
   
 
   addNewBookBtn.addEventListener("click",  () => bookInputModal.showModal());
@@ -205,13 +288,14 @@ const domInteractions = function() {
                              bookName: bookName.value, 
                              bookPages: bookPages.value, 
                              bookReadStatus: bookReadStatus.checked};
-    const bookCardDiv = makeBookCardUi();
 
     bookInputModal.close();   
-    createBook(bookValues, bookCardDiv, bookListElement);
+    createBook(bookValues);
   });
 };
 
 
-const library = new CreateLibrary();
+const library = new CreateLibrary;
+LocalStorage.publishBookFromLocal();
 domInteractions();
+
