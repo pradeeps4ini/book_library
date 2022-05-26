@@ -13,7 +13,7 @@
 
   --clr-primary: #f3f3f3;
   --clr-highlight: #63bfc4;
-  --clr-stats: hsl(0, 2%, 51.6%);
+  --clr-stats: hsl(0, 2.9%, 26.7%);
 }
 
 
@@ -93,7 +93,7 @@ input {
 
 
 #libraryStats {
-  padding: 5rem 2rem;
+  padding: 4rem 2rem;
   flex-flow: column nowrap;
   gap: 4rem;
 }
@@ -118,7 +118,7 @@ input {
 
 
 #bookList {
-  padding: 5rem 2rem; 
+  padding: 2rem 2rem; 
   display: grid;
   grid-template: repeat(auto-fit, minmax(200px, .5fr)) / repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
@@ -146,6 +146,7 @@ input {
 }
 
 .bookCardDiv p + p {
+  color: var(--clr-stats);
   max-width: max-content;
 }
 
