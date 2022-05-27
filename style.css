@@ -225,7 +225,10 @@ input:is(:hover, :focus) {
 
 .bookCardDiv p + p {
   color: var(--clr-stats);
-  overflow: scroll;
+}
+
+.bookCardDiv div:nth-child(-n+3) > p + p {
+  overflow-x: scroll;
 }
 
 .deleteBookCardBtn {
