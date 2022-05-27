@@ -13,9 +13,11 @@
 
   --clr-primary: #f3f3f3;
   --clr-highlight: #63bfc4;
-  --clr-stats: hsl(0, 2.9%, 26.7%);
+  --clr-stats: HSL(0, 2.9%, 26.7%);
+  --clr-btn-bg: HSL(195, 100%, 40%);
+  --clr-input-border: HSL(240, 6.7%, 58.8%); 
+  --clr-bg-bookNotRead: HSL(351.8, 57.3%, 65.1%);
 }
-
 
 html {
   font-size: var(--font-size);
@@ -34,44 +36,89 @@ section {
 }
 
 
-#bookInputModal {
-  font-size: calc(var(--font-size) * 1.4);
+dialog {
+  font-size: calc(var(--font-size) * 1.6);
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 2rem;
+  border: 2px solid var(--clr-primary);
+  border-radius: 6px;
+}
+
+dialog::backdrop {
+  background: var(--clr-primary);
 }
 
 #formModal {
   flex-flow: column nowrap;
-  gap: 1rem;  
+  gap: 2rem;  
 }
 
 #formModal div {
-  display: flex;
-  gap: 2rem;
+  justify-content: space-between;
+  gap: 3rem;
 }
 
 .bookInputCancelBtn {
   align-self: flex-end;
-  padding: 0 1rem;
-  margin-bottom: 1rem;
+  padding: .25rem .5rem;
+  margin-bottom: 1.5rem;
+  border: 2px solid var(--clr-btn-bg);
+  border-radius: 6px;
+  color: var(--clr-btn-bg);
+  background: transparent;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.bookInputCancelBtn:hover {
+  background-color: var(--clr-btn-bg);
+  color: var(--clr-light);
 }
 
 #submitBook {
+  font-size: inherit;
+  letter-spacing: 1px;
+  color: var(--clr-btn-bg);
+  background: transparent;
+  border: 3px solid var(--clr-btn-bg);
+  border-radius: 6px;
   align-self: center;
-  padding: .5rem 3rem;
+  margin-top: 2rem;
+  padding: 1.2rem 3.5rem;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+#submitBook:hover {
+  background: var(--clr-btn-bg);
+  color: var(--clr-light);
+}
+
+#submitBook:focus {
+  border: none;
 }
 
 label {
   display: inline-block;
   max-width: fit-content;  
   margin-right: 1rem;
+  width: 15rem;
 }
 
 input {
-  max-width: 15rem;
+  width: 15rem;
+  padding: 2px 0 2px 5px;
+  border: 1px solid var(--clr-input-border);
+  border-radius: 3px;
+  transition-duration: 0.4s;
+}
+
+input:is(:hover, :focus) {
+  border-color: var(--clr-btn-bg);
 }
 
 
@@ -112,15 +159,37 @@ input {
   width: 130px;
 }
 
-.libraryStats p+p {
+.libraryStats p + p {
   color: var(--clr-stats);  
 }
 
 
+.addNewBookBtn {
+  color: var(--clr-btn-bg);
+  background: transparent;
+  border: 3px solid var(--clr-btn-bg);
+  border-radius: 6px;
+  padding: 1.6rem 3.2rem;
+  text-align: center; 
+  font-size: calc(var(--font-size) * 1.6);
+  transition-duration: 0.4s;
+  cursor: pointer;
+  text-decoration: none;
+} 
+
+.addNewBookBtn:hover {
+  background-color: #008CBA;
+  color: var(--clr-light);
+}
+
+
+#books {
+  padding: 2rem 2rem;
+}
+
 #bookList {
-  padding: 2rem 2rem; 
   display: grid;
-  grid-template: repeat(auto-fit, minmax(200px, .5fr)) / repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns:  repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
 }
 
@@ -151,13 +220,27 @@ input {
 }
 
 .deleteBookCardBtn {
- align-self: flex-end;
+  align-self: flex-end;
+  border: none; 
+  border-radius: 3px;
 }
 
-.toggleBtn {
+.bookRead, .bookNotRead {
   align-self: center;
-  padding: .3rem 4rem;
-  background: var(--clr-highlight);
+  padding: 1.2rem 3.2rem;
+  margin-top: 1.5rem;
   border: none;
+  border-radius: 6px;
+  font-size: calc(var(--font-size) * 1.5);
+  font-weight: bold;
+  width: 150px;
+  color: var(--clr-light);
 }
 
+.bookRead {
+  background: var(--clr-btn-bg);
+}
+
+.bookNotRead {
+  background: var(--clr-bg-bookNotRead);
+}

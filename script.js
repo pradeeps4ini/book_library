@@ -3,7 +3,7 @@
 
 const domElements = function() {
   const bookInputModal = document.getElementById("bookInputModal");
-  const addNewBookBtn = document.querySelector(".addNewBook");
+  const addNewBookBtn = document.querySelector(".addNewBookBtn");
   const bookInputCancelBtn = document.querySelector(".bookInputCancelBtn");
   const submitBook = document.getElementById("submitBook");
   const authorName = document.getElementById("authorName");
@@ -118,7 +118,7 @@ class LocalStorage {
 
   static deleteBook(bookId) {
     const localBooks = JSON.parse(localStorage.getItem("allBooks"));
-    localBooks.splice(bookId - 1, 1);
+    localBooks.splice(bookId, 1);
     localStorage.setItem("allBooks", JSON.stringify(localBooks));
   }
 
@@ -126,7 +126,7 @@ class LocalStorage {
     const localBooks = JSON.parse(localStorage.getItem("allBooks"));
     const booksLength = localBooks.length;
     
-    for (let i= bookId - 1; i < booksLength; i+= 1) {
+    for (let i= bookId; i < booksLength; i+= 1) {
       localBooks[i].id -= 1;
     }
 
@@ -149,6 +149,11 @@ class LocalStorage {
 const CreateLibrary = function() {
   this.allBooks = [];
   
+  this.generateBookId = function() {
+    const id = (this.allBooks.length);
+    return id;
+  };
+
   this.isBookInLibrary = function(newBook) {
     const newBookAuthor = newBook.authorName.toLowerCase();
     const newBookName = newBook.bookName.toLowerCase();
@@ -170,7 +175,7 @@ const CreateLibrary = function() {
   };
 
   this.removeBook = function(bookId) {
-    this.allBooks.splice(bookId - 1, 1);
+    this.allBooks.splice(bookId, 1);
   };
 
   this.updateBookReadStatus = function(bookId) {
@@ -183,14 +188,9 @@ const CreateLibrary = function() {
   this.shiftBooksId = function(lastRemovedBookId) {
     let allBooksLength = this.allBooks.length;
    
-    for (let i= lastRemovedBookId - 1; i< allBooksLength; i+= 1) {
+    for (let i= lastRemovedBookId; i< allBooksLength; i+= 1) {
       this.allBooks[i].id -= 1;  
     }
-  };
-
-  this.generateBookId = function() {
-    const id = (this.allBooks.length) + 1;
-    return id;
   };
 
   this.bookStats = function() {
@@ -231,6 +231,8 @@ class Book {
     bookCardDiv.children[3].children[1].textContent = newBook.bookPages;
 
     bookCardDiv.children[4].textContent = `${(newBook.bookReadStatus === true) ? "Read" : "Not Read"}`;
+    (newBook.bookReadStatus === true) ? bookCardDiv.children[4].classList.add("bookRead") : bookCardDiv.children[4].classList.add("bookNotRead");
+
     bookCardDiv.classList.add(newBook.id); 
     bookListElement.appendChild(bookCardDiv);
     library.bookStats()
@@ -239,13 +241,24 @@ class Book {
   static updateDomBookIds = function(domBookList, bookId) {
     const domBookLength = domBookList.children.length;
 
-    for (let i = bookId - 1; i< domBookLength; i+= 1) {
-      domBookList.children[i].className = i + 1;
+    for (let i = bookId; i< domBookLength; i+= 1) {
+      domBookList.children[i].className = "bookCardDiv";
+      domBookList.children[i].classList.add(i);
+      
     }
   }
 
   static toggleReadStatus = function() {
     event.target.textContent = event.target.textContent.includes("Not") ? "Read" : "Not Read";
+    
+    if (event.target.classList[1] === "bookRead") {
+      event.target.classList.remove("bookRead");
+      event.target.classList.add("bookNotRead");
+    } else {
+      event.target.classList.add("bookRead");
+      event.target.classList.remove("bookNotRead");
+    }
+
     const bookId = +event.target.parentNode.classList[1];
     library.updateBookReadStatus(bookId)
     library.bookStats();
