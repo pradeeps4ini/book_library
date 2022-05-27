@@ -35,6 +35,10 @@ section {
   display: flex;
 }
 
+button:hover {
+  transform: scale(1.1);
+}
+
 
 dialog {
   font-size: calc(var(--font-size) * 1.6);
@@ -125,7 +129,7 @@ input:is(:hover, :focus) {
 #library {
   max-width: 100%;
   display: grid;
-  grid-template: 1fr 5fr / 1.3fr 4fr;
+  grid-template: 100px 1fr / 1.3fr 4fr;
   grid-template-areas: "header header"
                        "bookStats bookList";
   gap: 2rem;
@@ -196,7 +200,7 @@ input:is(:hover, :focus) {
 
 #bookList > div {
   font-size: calc(var(--font-size) * 1.5);
-  max-width: 25rem;
+  width: 25rem;
   padding: 2rem 2rem 3rem 2rem;
   background: var(--clr-primary);
   border: 1px solid var(--clr-light);
@@ -217,7 +221,7 @@ input:is(:hover, :focus) {
 
 .bookCardDiv p + p {
   color: var(--clr-stats);
-  max-width: max-content;
+  overflow: scroll;
 }
 
 .deleteBookCardBtn {
@@ -236,6 +240,7 @@ input:is(:hover, :focus) {
   font-weight: bold;
   width: 150px;
   color: var(--clr-light);
+  transition-duration: 0.4s;
 }
 
 .bookRead {
