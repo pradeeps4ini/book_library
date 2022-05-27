@@ -129,7 +129,7 @@ input:is(:hover, :focus) {
 #library {
   max-width: 100%;
   display: grid;
-  grid-template: 100px 1fr / 1.3fr 4fr;
+  grid-template: 100px  / 1.3fr 4fr;
   grid-template-areas: "header header"
                        "bookStats bookList";
   gap: 2rem;
