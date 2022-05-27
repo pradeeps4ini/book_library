@@ -33,36 +33,37 @@
     </div>
 
     <div class="newBookButton">
-      <button class="addNewBook" type="button"><span>&#43;</span>Add Book</button>
+      <button class="addNewBookBtn" type="button"><span>&#43;</span> Add New Book</button>
     </div>
   </section>
-  <section id="bookList">
+  <section id="books">
+    <div id="bookList"></div>
   </section>
  
   <dialog id="bookInputModal">
     <form id ="formModal" class="flex" action="" method="dialog">
       <button type="button" class="bookInputCancelBtn">&#10799;</button>
-      <div>
+      <div class="flex">
         <label for="authorName">Author Name</label>
         <input type="text" id="authorName" name="authorName">
       </div>
 
-      <div>
+      <div class="flex">
         <label for="bookName">Book Name</label>
         <input type="text" id="bookName" name="bookName">
       </div>
 
-      <div>
+      <div class="flex">
         <label for="bookPages">Book Pages</label>
         <input type="number" id="bookPages" name="bookPages">
       </div>
 
-      <div>
+      <div class="flex">
         <label for="isBookRead">Is Book Read?</label>
         <input type="checkbox" id="isBookRead" name="isBookRead">
       </div>
 
-      <button type="button" id="submitBook">Submit</button>
+      <button type="button" id="submitBook">submit</button>
     </form>
   </dialog>
   </div>
