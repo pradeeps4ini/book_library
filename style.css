@@ -49,7 +49,7 @@ dialog {
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 3rem;
-  border: 4px solid var(--clr-primary);
+  border: 4px solid var(--clr-btn-bg);
   border-radius: 8px;
 }
 
@@ -197,14 +197,13 @@ input:is(:hover, :focus) {
 
 #bookList {
   display: grid;
-  grid-template-columns:  repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns:  repeat(auto-fit, minmax(400px, 1fr));
   place-items: center;
   gap: 2rem;
 }
 
 #bookList > div {
   font-size: calc(var(--font-size) * 1.5);
-  width: 25rem;
   padding: 2rem 2rem 3rem 2rem;
   background: var(--clr-primary);
   border: 1px solid var(--clr-light);
@@ -257,3 +256,6 @@ input:is(:hover, :focus) {
 .bookNotRead {
   background: var(--clr-bg-bookNotRead);
 }
+
+
+@media (min-width: 3
