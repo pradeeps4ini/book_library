@@ -324,4 +324,3 @@ const domInteractions = function() {
 const library = new CreateLibrary;
 LocalStorage.publishBookFromLocal();
 domInteractions();
-
