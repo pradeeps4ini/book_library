@@ -1,6 +1,5 @@
 "use strict";
 
-
 const domElements = function() {
   const bookInputModal = document.getElementById("bookInputModal");
   const addNewBookBtn = document.querySelector(".addNewBookBtn");
@@ -20,37 +19,32 @@ const domElements = function() {
 }
 
 
-const createElement = function(element) {
-  return document.createElement(element);
-} 
-
-
 const makeBookCardUi = function() {
-  const bookCardDiv = createElement("div");
-  const authorNameDiv = createElement("div");
-  const bookNameDiv = createElement("div");
-  const bookPagesDiv = createElement("div");
+  const bookCardDiv = document.createElement("div");
+  const authorNameDiv = document.createElement("div");
+  const bookNameDiv = document.createElement("div");
+  const bookPagesDiv = document.createElement("div");
 
-  const authorTitle = createElement("p");
-  const bookTitle = createElement("p");
-  const bookPagesTitle = createElement("p");
+  const authorTitle = document.createElement("p");
+  const bookTitle = document.createElement("p");
+  const bookPagesTitle = document.createElement("p");
 
   authorTitle.textContent = "Author: ";
   bookTitle.textContent = "Book: ";
   bookPagesTitle.textContent = "Pages: ";
 
-  const authorNamePara = createElement("p");
-  const bookNamePara = createElement("p");
-  const bookPagesPara = createElement("p");
-  const toggleBookReadStatus = createElement("button");
+  const authorNamePara = document.createElement("p");
+  const bookNamePara = document.createElement("p");
+  const bookPagesPara = document.createElement("p");
+  const toggleBookReadStatus = document.createElement("button");
    
   toggleBookReadStatus.setAttribute("class", "toggleBtn");
   [authorTitle, authorNamePara].forEach((item) => authorNameDiv.appendChild(item));
   [bookTitle, bookNamePara].forEach((item) => bookNameDiv.appendChild(item));
   [bookPagesTitle, bookPagesPara].forEach((item) => bookPagesDiv.appendChild(item));
 
-  const deleteImg = createElement("img");
-  const deleteBtn = createElement("button");
+  const deleteImg = document.createElement("img");
+  const deleteBtn = document.createElement("button");
   deleteImg.setAttribute("src", "./images/bin.png");
   deleteImg.setAttribute("alt", "delete book button");
   deleteBtn.appendChild(deleteImg);
@@ -70,7 +64,7 @@ const makeBookCardUi = function() {
     forEach((item) => bookCardDiv.appendChild(item));
     
   return bookCardDiv;
-}
+};
 
 
 class LocalStorage {
@@ -80,18 +74,18 @@ class LocalStorage {
     const books = (localBooks) ? JSON.parse(localBooks) : null;
     if (books) {
       books.forEach(book => createBook(book));
-    }
-  }
+    };
+  };
 
   static setBooks() {
     localStorage.setItem("allBooks", library.allBooks);
-  }
+  };
 
   static getBooks() {
     const localBooks = localStorage.getItem("allBooks");
     const books = (localBooks) ? JSON.parse(localBooks) : null;
     return books;
-  }
+  };
 
   static isBookInLocalStorage(allBooks, book) {
     const authorName = book.authorName;
@@ -101,10 +95,10 @@ class LocalStorage {
       const book = item.bookName;
 
       return (author === authorName && book === bookName) ? item : null;
-    })
+    });
 
     return (duplicateBook.length > 0) ? false : true;
-  }
+  };
 
   static addBook(newBook) {
     const localBooks = localStorage.getItem("allBooks");
@@ -113,14 +107,14 @@ class LocalStorage {
     if (bookInLocalStorage) {
       books.push(newBook);
       localStorage.setItem("allBooks", JSON.stringify(books));
-    }
-  }
+    };
+  };
 
   static deleteBook(bookId) {
     const localBooks = JSON.parse(localStorage.getItem("allBooks"));
     localBooks.splice(bookId, 1);
     localStorage.setItem("allBooks", JSON.stringify(localBooks));
-  }
+  };
 
   static shiftBooksId(bookId) {
     const localBooks = JSON.parse(localStorage.getItem("allBooks"));
@@ -128,10 +122,10 @@ class LocalStorage {
     
     for (let i= bookId; i < booksLength; i+= 1) {
       localBooks[i].id -= 1;
-    }
+    };
 
     localStorage.setItem("allBooks", JSON.stringify(localBooks));
-  }
+  };
 
   static updateReadStatus(bookId) {
     const localBooks = localStorage.getItem("allBooks");
@@ -140,9 +134,9 @@ class LocalStorage {
       if (book.id === bookId) {
         book.bookReadStatus = !book.bookReadStatus;
       }
-    })
+    });
     localStorage.setItem("allBooks", JSON.stringify(books));
-  }
+  };
 };
 
 
@@ -168,7 +162,7 @@ const CreateLibrary = function() {
     });
 
     return (duplicateBook.length > 0) ? false : true;
-  }
+  };
 
   this.addBook = function(newBook) {
      this.allBooks.push(newBook);
@@ -182,7 +176,7 @@ const CreateLibrary = function() {
     this.allBooks.forEach((book) => {
       if (book.id === bookId) {
         book.bookReadStatus = !book.bookReadStatus;}
-    })
+    });
   };
 
   this.shiftBooksId = function(lastRemovedBookId) {
@@ -190,7 +184,7 @@ const CreateLibrary = function() {
    
     for (let i= lastRemovedBookId; i< allBooksLength; i+= 1) {
       this.allBooks[i].id -= 1;  
-    }
+    };
   };
 
   this.bookStats = function() {
@@ -211,7 +205,7 @@ const CreateLibrary = function() {
     libraryStatsElement.children[1].children[1].textContent = totalBooks;
     libraryStatsElement.children[2].children[1].textContent = readBooks;
     libraryStatsElement.children[3].children[1].textContent = notReadBooks;
-  }
+  };
 }; 
 
 
@@ -223,7 +217,7 @@ class Book {
     this.bookPages = bookPages;
     this.bookReadStatus = bookReadStatus;
     this.id = id;
-  }
+  };
   
   static publishBookToWebPage = function(newBook, bookCardDiv,  bookListElement) {
     bookCardDiv.children[1].children[1].textContent = newBook.authorName;
@@ -236,7 +230,7 @@ class Book {
     bookCardDiv.classList.add(newBook.id); 
     bookListElement.appendChild(bookCardDiv);
     library.bookStats()
-  }
+  };
 
   static updateDomBookIds = function(domBookList, bookId) {
     const domBookLength = domBookList.children.length;
@@ -245,8 +239,8 @@ class Book {
       domBookList.children[i].className = "bookCardDiv";
       domBookList.children[i].classList.add(i);
       
-    }
-  }
+    };
+  };
 
   static toggleReadStatus = function() {
     event.target.textContent = event.target.textContent.includes("Not") ? "Read" : "Not Read";
@@ -263,7 +257,7 @@ class Book {
     library.updateBookReadStatus(bookId)
     library.bookStats();
     LocalStorage.updateReadStatus(bookId);
-  }
+  };
 
   static deleteBookCard = function() {
     let bookDiv = (event.target === event.currentTarget) ? 
@@ -279,8 +273,8 @@ class Book {
     this.updateDomBookIds(bookList, bookId);
     LocalStorage.deleteBook(bookId);
     LocalStorage.shiftBooksId(bookId);
-  }
-}
+  };
+};
 
 
 const createBook = function(bookInputValues) {
@@ -297,7 +291,7 @@ const createBook = function(bookInputValues) {
     library.bookStats(libraryStatsElement);
     LocalStorage.addBook(newBook);
   };
-}
+};
 
 
 const domInteractions = function() {

@@ -8,8 +8,8 @@
 :root {
   --font-size: 10px;
   
-  --clr-light: #ffffff;
-  --clr-dark: #000000;
+  --clr-light: HSL(0, 0%, 100%);
+  --clr-dark: HSL(0, 0%, 0%);
 
   --clr-primary: #f3f3f3;
   --clr-highlight: #63bfc4;
@@ -29,6 +29,8 @@ body {
   height: 100%;
 }
 
+
+/* utility style */
 section {
   background-color: var(--clr-light);
 }
@@ -41,6 +43,8 @@ button:hover {
   transform: scale(1.1);
 }
 
+
+/* dialog modal to enter new book */
 
 dialog {
   font-size: calc(var(--font-size) * 1.6);
@@ -110,15 +114,15 @@ dialog::backdrop {
 }
 
 label {
+  font-size: calc(15% + 1rem);
   display: inline-block;
   max-width: fit-content;  
   margin-right: 1rem;
-  width: 15rem;
 }
 
 input {
-  width: 15rem;
-  padding: 2px 0 2px 5px;
+  inline-size: 15rem;
+  padding: 1px 0 1px 3px;
   border: 1px solid var(--clr-input-border);
   border-radius: 3px;
   transition-duration: 0.4s;
@@ -128,6 +132,8 @@ input:is(:hover, :focus) {
   border-color: var(--clr-btn-bg);
 }
 
+
+/* main page  */
 
 #library {
   max-width: 100%;
@@ -146,6 +152,8 @@ input:is(:hover, :focus) {
   grid-area: header;
 }
 
+
+/* books stats section */
 
 #libraryStats {
   padding: 4rem 2rem;
@@ -186,20 +194,21 @@ input:is(:hover, :focus) {
 } 
 
 .addNewBookBtn:hover {
-  background-color: #008CBA;
+  background-color: var(--clr-btn-bg);
   color: var(--clr-light);
 }
 
 
+/* Books List */
+
 #books {
-  padding: 2rem 2rem;
+  padding: 3rem 4rem;
 }
 
 #bookList {
   display: grid;
-  grid-template-columns:  repeat(auto-fit, minmax(400px, 1fr));
-  place-items: center;
-  gap: 2rem;
+  grid-template-columns:  repeat(auto-fit, minmax(300px, 1fr));
+  gap: 4rem;
 }
 
 #bookList > div {
@@ -257,5 +266,3 @@ input:is(:hover, :focus) {
   background: var(--clr-bg-bookNotRead);
 }
 
-
-@media (min-width: 3
